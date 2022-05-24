@@ -44,6 +44,13 @@ async function run() {
         const result = await bookingCollection.insertOne(booking);
         res.send(result);
       })
+
+      app.get('/booking', async (req, res) => {
+        const query = {};
+        const cursor = bookingCollection.find(query);
+        const products = await cursor.toArray()
+        res.send(products)
+    });
         
     }
     finally {
