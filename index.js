@@ -18,54 +18,56 @@ const client = new MongoClient(uri, {
 });
 
 async function run() {
-    try {
-        await client.connect();
-        const productCollection = client.db('tools-house').collection('products');
-        
-        const bookingCollection = client.db('tools-house').collection('booking');
-        
+  try {
+    await client.connect();
+    const productCollection = client.db('tools-house').collection('products');
 
-        app.get('/product', async (req, res) => {
-            const query = {};
-            const cursor = productCollection.find(query);
-            const products = await cursor.toArray()
-            res.send(products)
-        });
+    const bookingCollection = client.db('tools-house').collection('booking');
 
-        app.get('/product/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const product = await productCollection.findOne(query);
-            res.send(product)
-        })
-
-      app.post('/product', async (req, res) => {
-        const newProduct = req.body;
-        const result = await productCollection.insertOne(newProduct);
-        res.send(result);
-        })
-
-      
-      app.post('/booking', async (req, res) => {
-        const booking = req.body;
-        const result = await bookingCollection.insertOne(booking);
-        res.send(result);
-      })
-
-      app.get('/booking', async (req, res) => {
-        const query = {};
-        const cursor = bookingCollection.find(query);
-        const products = await cursor.toArray()
-        res.send(products)
+    app.get('/product', async (req, res) => {
+      const query = {};
+      const cursor = productCollection.find(query);
+      const products = await cursor.toArray();
+      res.send(products);
     });
-        
-    }
-    finally {
-        
-    }
-}
-run().catch(console.dir)
 
+    app.get('/product/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const product = await productCollection.findOne(query);
+      res.send(product);
+    });
+
+    app.post('/product', async (req, res) => {
+      const newProduct = req.body;
+      const result = await productCollection.insertOne(newProduct);
+      res.send(result);
+    });
+
+    app.delete('/product/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      console.log(result);
+      res.send(result);
+    });
+
+    app.post('/booking', async (req, res) => {
+      const booking = req.body;
+      const result = await bookingCollection.insertOne(booking);
+      res.send(result);
+    });
+
+    app.get('/booking', async (req, res) => {
+      const query = {};
+      const cursor = bookingCollection.find(query);
+      const products = await cursor.toArray();
+      res.send(products);
+    });
+  } finally {
+  }
+}
+run().catch(console.dir);
 
 app.get('/', (req, res) => {
   res.send('Tools House server is running');
