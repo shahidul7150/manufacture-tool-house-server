@@ -22,6 +22,8 @@ async function run() {
         await client.connect();
         const productCollection = client.db('tools-house').collection('products');
         
+        const bookingCollection = client.db('tools-house').collection('booking');
+        
 
         app.get('/product', async (req, res) => {
             const query = {};
@@ -36,6 +38,12 @@ async function run() {
             const product = await productCollection.findOne(query);
             res.send(product)
         })
+      
+      app.post('/booking', async (req, res) => {
+        const booking = req.body;
+        const result = await bookingCollection.insertOne(booking);
+        res.send(result);
+      })
         
     }
     finally {
