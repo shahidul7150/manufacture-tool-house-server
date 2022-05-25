@@ -54,9 +54,6 @@ async function run() {
 
 
 
-
-   
-
     app.get('/booking', async (req, res) => {
       const query = {};
       const cursor = bookingCollection.find(query);
@@ -67,32 +64,13 @@ async function run() {
 
     //Specefic user
 
-    app.get('/booking', async (req, res) => {
-      const customer = req.query.customer;
-      
-     
-        const query = { customer: customer };
-        const bookings = await bookingCollection.find(query).toArray();
-        return res.send(bookings);
-     
-    });
+   
 
-
-
-    // app.get('/booking/:email', async (req, res) => {
-    //   const email = req.params.email;
-    //   const query = { _id: ObjectId(email) };
-    //   const result = await productCollection.find(query);
-    //   res.send(result);
-    // });
-    
-    // app.get('/booking', async (req, res) => {
-    //   const customer = req.query.result;
-    //   console.log(customer);
-    //   const query = { customer }
-    //   const result= await bookingCollection.find(query);
-    //   res.send(result)
-    // })
+    app.get('/myBooking',(req,res)=>{
+      const queryEmail=req.query.email;  
+      bookingCollection.find({email: queryEmail})
+      .toArray((err,docs)=>res.send(docs))
+    })
 
    
 
