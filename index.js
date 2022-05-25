@@ -23,6 +23,7 @@ async function run() {
     const productCollection = client.db('tools-house').collection('products');
 
     const bookingCollection = client.db('tools-house').collection('booking');
+    const reviewCollection = client.db('tools-house').collection('reviews');
 
     app.get('/product', async (req, res) => {
       const query = {};
@@ -86,6 +87,16 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const result = await bookingCollection.deleteOne(query);
       console.log(result);
+      res.send(result);
+    });
+
+
+
+    // reviews
+
+    app.post('/review', async (req, res) => {
+      const newReview = req.body;
+      const result = await reviewCollection.insertOne(newReview);
       res.send(result);
     });
   } finally {
