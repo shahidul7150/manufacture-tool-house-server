@@ -47,6 +47,17 @@ async function run() {
 
 
 // user
+    app.put('/user/admin/:email', async (req, res) => {
+      const email = req.params.email;
+      
+      const filter = { email: email };
+      
+      const updateDoc = {
+        $set:{role:'admin'}
+      }
+      const result = await usersCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    })
     app.put('/user/:email', async (req, res) => {
       const email = req.params.email;
       const user = req.body;
@@ -109,7 +120,7 @@ async function run() {
 
    
 
-    app.get('/myBooking',verifyJWT, async(req,res)=>{
+    app.get('/myBooking', async(req,res)=>{
       const queryEmail = req.query.email;  
       
       console.log('authorize',authorization)
