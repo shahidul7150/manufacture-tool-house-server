@@ -23,7 +23,23 @@ async function run() {
     const productCollection = client.db('tools-house').collection('products');
 
     const bookingCollection = client.db('tools-house').collection('booking');
+    const usersCollection = client.db('tools-house').collection('users');
     const reviewCollection = client.db('tools-house').collection('reviews');
+
+
+// user
+    app.put('/user/:email', async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set:user
+      }
+      const result = await usersCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    })
+
 
     app.get('/product', async (req, res) => {
       const query = {};
