@@ -18,6 +18,24 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
+
+function verifyJWT(req, res, next) {
+  console.log('abc');
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).send({message:'UnAuthorize Access'});
+  }
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
+    if (err) {
+      return res.status(403).send({ message: 'Forbidden Access' });
+    }
+    res.decoded = decoded;
+    next();
+  })
+}
+
+
 async function run() {
   try {
     await client.connect();
@@ -43,6 +61,12 @@ async function run() {
     })
 
 
+    app.get('/user', async (req, res) => {
+      const query = {};
+      const cursor = usersCollection.find(query);
+      const user = await cursor.toArray();
+      res.send(user);
+    });
     app.get('/product', async (req, res) => {
       const query = {};
       const cursor = productCollection.find(query);
@@ -85,9 +109,11 @@ async function run() {
 
    
 
-    app.get('/myBooking',(req,res)=>{
-      const queryEmail=req.query.email;  
-      bookingCollection.find({email: queryEmail})
+    app.get('/myBooking',verifyJWT, async(req,res)=>{
+      const queryEmail = req.query.email;  
+      
+      console.log('authorize',authorization)
+      await bookingCollection.find({email: queryEmail})
       .toArray((err,docs)=>res.send(docs))
     })
 
