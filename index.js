@@ -123,7 +123,7 @@ async function run() {
     app.get('/myBooking', async(req,res)=>{
       const queryEmail = req.query.email;  
       
-      console.log('authorize',authorization)
+
       await bookingCollection.find({email: queryEmail})
       .toArray((err,docs)=>res.send(docs))
     })
