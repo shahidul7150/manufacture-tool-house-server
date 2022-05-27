@@ -146,7 +146,12 @@ app.get('/user',verifyJWT, async (req, res) => {
       .toArray((err,docs)=>res.send(docs))
     })
 
-   
+    app.get('booking/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const booking = await bookingCollection.findOne(query);
+      res.send(booking);
+   })
 
     app.post('/booking', async (req, res) => {
       const booking = req.body;
