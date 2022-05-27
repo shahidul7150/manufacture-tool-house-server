@@ -1,10 +1,10 @@
 const express = require('express');
-// const cors = require('cors');
+const cors = require('cors');
 
-const corsConfig = {
-  origin: true,
-  credentials: true,
-  }
+// const corsConfig = {
+//   origin: true,
+//   credentials: true,
+//   }
 
 
 const jwt = require('jsonwebtoken');
@@ -14,11 +14,11 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const port = process.env.PORT || 5000;
 
-// app.use(cors());
+app.use(cors());
 
 
-app.use(cors(corsConfig))
-app.options('*', cors(corsConfig))
+// app.use(cors(corsConfig))
+// app.options('*', cors(corsConfig))
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cwy78.mongodb.net/?retryWrites=true&w=majority`;
